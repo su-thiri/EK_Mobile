@@ -1,8 +1,11 @@
+import 'package:easy_kart_app/config/app_color.dart';
+import 'package:easy_kart_app/config/app_textstyle.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class QRScannerScreen extends StatelessWidget {
-  const QRScannerScreen({super.key});
+  final bool isScanOut;
+  const QRScannerScreen({super.key, required this.isScanOut});
 
   @override
   Widget build(BuildContext context) {
@@ -37,13 +40,12 @@ class QRScannerScreen extends StatelessWidget {
                     height: 20,
                   ),
                   Text(
-                    'SCAN FIRST DRIVERS OR\nDRIVER CHANGES!',
+                    isScanOut
+                        ? 'SCAN DRIVER OUT'
+                        : 'SCAN FIRST QR\n OR\nDRIVER CHANGES!',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style:
+                        AppTextStyle.selectText.copyWith(color: AppColor.blue),
                   ),
                 ],
               ),

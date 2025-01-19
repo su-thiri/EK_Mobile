@@ -1,5 +1,11 @@
+import 'package:easy_kart_app/config/app_color.dart';
+import 'package:easy_kart_app/config/app_textstyle.dart';
 import 'package:easy_kart_app/view/scan/scan_in_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
+
+import '../scan/scan_page.dart';
+import 'widget/button_widget.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -7,93 +13,64 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: Text(
-          'IOChamp',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+        backgroundColor: Colors.white,
+        title: Image.asset(
+          'assets/images/banner.png', // Add your background image to assets
+          fit: BoxFit.cover,
         ),
       ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 30,
-          ),
-          Center(
-            child: Image.asset(
-              'assets/images/banner.png', // Add your background image to assets
-              fit: BoxFit.cover,
+      body: Center(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 30,
             ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Text(
-            'Select Screen Mode For Present Phone',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Colors.black,
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ScanInPage(),
-                ),
-              );
-            },
-            child: Container(
-              height: 140,
-              width: 150,
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              margin: EdgeInsets.symmetric(vertical: 20),
-              decoration: BoxDecoration(
-                  color: Colors.amber.shade300,
-                  borderRadius: BorderRadius.circular(5)),
-              child: Center(
-                child: Text(
-                  "Scan First\n Driver Or \nDriver Change",
-                  maxLines: 3,
-                  textAlign: TextAlign.justify,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 3),
+                child: TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    'Select Screen Mode For Present Phone',
+                    style:
+                        AppTextStyle.selectText.copyWith(color: AppColor.blue),
                   ),
-                ),
+                )),
+            SizedBox(
+              height: 10,
+            ),
+            GestureDetector(
+              onTap: () {
+                Get.to(() => ScanInPage());
+              },
+              child: ButtonWidget(
+                title: "Scan In\n Or \nDriver Change",
+                icon: 'assets/images/arrow_updown.svg',
+                isScanOut: false,
               ),
             ),
-          ),
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              height: 140,
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              width: 150,
-              decoration: BoxDecoration(
-                  color: Colors.amber.shade300,
-                  borderRadius: BorderRadius.circular(5)),
-              child: Center(
-                child: Text(
-                  "Scan Drivers Out",
-                  maxLines: 3,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
-                  ),
-                ),
+            GestureDetector(
+              onTap: () {
+                Get.to(() => QRScannerScreen(
+                      isScanOut: true,
+                    ));
+              },
+              child: ButtonWidget(
+                title: "Scan Out",
+                icon: 'assets/images/share_scan.svg',
+                isScanOut: true,
               ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 3),
+              child: Text(
+                'Select Round For Scanning First',
+                style: AppTextStyle.selectText.copyWith(color: AppColor.blue),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
