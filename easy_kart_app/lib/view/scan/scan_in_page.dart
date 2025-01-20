@@ -77,13 +77,21 @@ class ScanInPage extends StatelessWidget {
               ],
             ),
           ),
-          ScanButtonWidget(
-            title: 'Send',
-            onClicked: () {
-              apiController
-                  .sendData({"qr_code": apiController.qrController.text});
-            },
-          ),
+
+
+
+
+       ScanButtonWidget(
+              title: 'Send',
+              onClicked: () {
+                // Check if input is valid, if valid send data
+                apiController.qrController.text.isEmpty
+                    ? null
+                    : apiController.sendData({"qr_code": apiController.qrController.text});
+              },
+
+          )
+
         ],
       ),
     );

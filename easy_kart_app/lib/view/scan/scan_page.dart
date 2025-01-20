@@ -1,6 +1,8 @@
 import 'package:easy_kart_app/config/app_color.dart';
 import 'package:easy_kart_app/config/app_textstyle.dart';
+import 'package:easy_kart_app/controller/home_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class QRScannerScreen extends StatelessWidget {
@@ -9,22 +11,39 @@ class QRScannerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final apiController = Get.find<ApiController>();
     return Scaffold(
       body: Stack(
         children: [
           MobileScanner(
-            onDetect: (barcodeCapture) {
-              final List<Barcode> barcodes = barcodeCapture.barcodes;
-              for (final barcode in barcodes) {
+            onDetect: (barcodeCapture) async {
+              if (barcodeCapture.barcodes.isNotEmpty) {
+                final barcode =
+                    barcodeCapture.barcodes.first; // Take the first barcode
                 if (barcode.rawValue != null) {
                   final String code = barcode.rawValue!;
                   print('QR Code Found: $code');
-                  // Handle the scanned QR code here
+
+                  // Call the API and post the QR code number
+                  await apiController.sendQRData({"qr_code": code});
                 }
               }
             },
             fit: BoxFit.cover,
           ),
+          // MobileScanner(
+          //   onDetect: (barcodeCapture) {
+          //     final List<Barcode> barcodes = barcodeCapture.barcodes;
+          //     for (final barcode in barcodes) {
+          //       if (barcode.rawValue != null) {
+          //         final String code = barcode.rawValue!;
+          //         print('QR Code Found: $code');
+          //         // Handle the scanned QR code here
+          //       }
+          //     }
+          //   },
+          //   fit: BoxFit.cover,
+          // ),
           Positioned(
             top: 50,
             left: 0,
