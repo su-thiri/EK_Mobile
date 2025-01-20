@@ -1,10 +1,10 @@
 import 'package:easy_kart_app/config/app_color.dart';
-import 'package:easy_kart_app/config/app_textstyle.dart';
 import 'package:easy_kart_app/view/scan/scan_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/instance_manager.dart';
 
+import '../../controller/home_controller.dart';
 import '../../util/dialog.dart';
 import 'widget/scan_button_widget.dart';
 
@@ -13,6 +13,7 @@ class ScanInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ApiController apiController = Get.put(ApiController());
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -42,19 +43,46 @@ class ScanInPage extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 50),
-            child: TextField(
-                decoration: InputDecoration(
-              filled: true,
-              fillColor: AppColor.lightGreyColor,
-              border: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.circular(15),
-              ),
-            )),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  controller: apiController.qrController,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  onChanged: (value) {
+                    if (value.isEmpty || int.tryParse(value) == null) {
+                      apiController.isInputValid.value = false;
+                    } else {
+                      apiController.isInputValid.value = true;
+                    }
+                  },
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: AppColor.lightGreyColor,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                ),
+                Obx(() => apiController.isInputValid.value
+                    ? const SizedBox()
+                    : const Text(
+                        'Please enter a valid number',
+                        style: TextStyle(color: Colors.red),
+                      )),
+              ],
+            ),
           ),
           ScanButtonWidget(
             title: 'Send',
-            onClicked: () {},
+            onClicked: () {
+              apiController
+                  .sendData({"qr_code": apiController.qrController.text});
+            },
           ),
         ],
       ),

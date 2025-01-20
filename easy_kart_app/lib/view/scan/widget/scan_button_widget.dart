@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
 
 import '../../../config/app_color.dart';
 import '../../../config/app_textstyle.dart';
-import '../scan_page.dart';
 
 class ScanButtonWidget extends StatelessWidget {
   final String title;

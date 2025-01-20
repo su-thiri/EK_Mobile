@@ -1,7 +1,6 @@
 import 'package:easy_kart_app/config/app_textstyle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import '../config/app_color.dart';
 
