@@ -5,9 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-class QRScannerScreen extends StatelessWidget {
-  final bool isScanOut;
-  const QRScannerScreen({super.key, required this.isScanOut});
+class ScanOutQRScannerScreen extends StatelessWidget {
+  const ScanOutQRScannerScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,34 +22,43 @@ class QRScannerScreen extends StatelessWidget {
                   final barcode = barcodeCapture.barcodes.first;
                   if (barcode.rawValue != null) {
                     code = barcode.rawValue!;
-                    await apiController.sendQRData(code);
+                    final scanDateTime = DateTime.now();
+
+                    // Separate date and time
+                    final scanDate =
+                        "${scanDateTime.year}-${scanDateTime.month.toString().padLeft(2, '0')}-${scanDateTime.day.toString().padLeft(2, '0')}";
+                    final scanTime =
+                        "${scanDateTime.hour.toString().padLeft(2, '0')}:${scanDateTime.minute.toString().padLeft(2, '0')}:${scanDateTime.second.toString().padLeft(2, '0')}";
+
+                    print("Scan Date: $scanDate");
+                    print("Scan Time: $scanTime");
+
+                    // Pass date and time separately to the API
+                    await apiController.sendScanOutQRData(scanDate, scanTime);
                   }
                 }
               }
-              // if (barcodeCapture.barcodes.isNotEmpty) {
-              //   final barcode = barcodeCapture.barcodes.first;
-              //   if (barcode.rawValue != null) {
-              //     final String code = barcode.rawValue!;
-              //     print('QR Code Found: $code');
-              //     // await apiController.sendQRData(code);
-              //   }
-              // }
             },
             fit: BoxFit.cover,
           ),
+
           // MobileScanner(
-          //   onDetect: (barcodeCapture) {
-          //     final List<Barcode> barcodes = barcodeCapture.barcodes;
-          //     for (final barcode in barcodes) {
-          //       if (barcode.rawValue != null) {
-          //         final String code = barcode.rawValue!;
-          //         print('QR Code Found: $code');
-          //         // Handle the scanned QR code here
+          //   onDetect: (barcodeCapture) async {
+          //     if (code == "") {
+          //       if (barcodeCapture.barcodes.isNotEmpty) {
+          //         final barcode = barcodeCapture.barcodes.first;
+          //         if (barcode.rawValue != null) {
+          //           code = barcode.rawValue!;
+          //           print("Scan Out $code");
+          //           // await apiController.sendScanOutQRData(code);
+          //         }
           //       }
           //     }
+
           //   },
           //   fit: BoxFit.cover,
           // ),
+
           Positioned(
             top: 50,
             left: 0,
@@ -66,9 +74,7 @@ class QRScannerScreen extends StatelessWidget {
                     height: 20,
                   ),
                   Text(
-                    isScanOut
-                        ? 'SCAN DRIVER OUT'
-                        : 'SCAN FIRST QR\n OR\nDRIVER CHANGES!',
+                    'SCAN DRIVER OUT',
                     textAlign: TextAlign.center,
                     style:
                         AppTextStyle.selectText.copyWith(color: AppColor.blue),

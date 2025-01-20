@@ -1,5 +1,5 @@
 import 'package:easy_kart_app/config/app_color.dart';
-import 'package:easy_kart_app/view/scan/scan_page.dart';
+import 'package:easy_kart_app/view/scan/scanin_qr_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -35,7 +35,7 @@ class ScanInPage extends StatelessWidget {
               scanDialog(context, 'Are you sure, you want to scan DRIVER-1 ?',
                   () {
                 Get.back();
-                Get.to(() => QRScannerScreen(
+                Get.to(() => ScanInQRScannerScreen(
                       isScanOut: false,
                     ));
               });
@@ -77,21 +77,15 @@ class ScanInPage extends StatelessWidget {
               ],
             ),
           ),
-
-
-
-
-       ScanButtonWidget(
-              title: 'Send',
-              onClicked: () {
-                // Check if input is valid, if valid send data
-                apiController.qrController.text.isEmpty
-                    ? null
-                    : apiController.sendData({"qr_code": apiController.qrController.text});
-              },
-
+          ScanButtonWidget(
+            title: 'Send',
+            onClicked: () {
+              apiController.qrController.text.isEmpty
+                  ? null
+                  : apiController
+                      .sendData({"qr_code": apiController.qrController.text});
+            },
           )
-
         ],
       ),
     );

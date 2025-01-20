@@ -49,6 +49,69 @@ class ApiController extends GetxController {
     }
   }
 
+  Future<void> sendScanOutQRData(String time, String date) async {
+    if (isProcessing.value) return; // Prevent multiple API calls
+
+    isProcessing.value = true; // Set processing flag to true
+    Get.dialog(
+      const Center(child: CircularProgressIndicator()),
+      barrierDismissible: false,
+    );
+
+    try {
+      final response = await _apiRepository.postMobileData(
+        mobileDataUrl,
+        {"time": time, "date": date},
+      );
+      if (response.isNotEmpty) {
+        isProcessing.value = false;
+
+        await Get.defaultDialog(
+          backgroundColor: AppColor.buttonColor,
+          title: "Driver Successfully Scanned Out.",
+          titleStyle: AppTextStyle.dialogText.copyWith(fontSize: 20),
+          content: Text(
+            "Driver End Driving Time is Saved Successfully.",
+            // "${response['message']}",
+            style: AppTextStyle.dialogText,
+          ),
+          confirm: ElevatedButton(
+            onPressed: () => Get.offAll(HomePage()),
+            child: Text(
+              "OK",
+              style: AppTextStyle.buttonText
+                  .copyWith(color: Colors.black, fontSize: 15),
+            ),
+          ),
+        );
+      } else {}
+    } catch (e) {
+      Get.back();
+
+      String errorMessage;
+      if (e is HttpException) {
+        errorMessage = e.message;
+      } else if (e is SocketException) {
+        errorMessage = "No internet connection. Please try again.";
+      } else if (e is TimeoutException) {
+        errorMessage = "Request timed out. Please try again.";
+      } else {
+        errorMessage = e.toString(); // Fallback for other exception types
+      }
+
+      Get.defaultDialog(
+        title: "Error",
+        content: Text("Failed to send data: $errorMessage"),
+        confirm: ElevatedButton(
+          onPressed: () => Get.back(),
+          child: const Text("OK"),
+        ),
+      );
+    } finally {
+      isProcessing.value = false; // Reset the flag after the process
+    }
+  }
+
   Future<void> sendQRData(String qrCode) async {
     if (isProcessing.value) return; // Prevent multiple API calls
 

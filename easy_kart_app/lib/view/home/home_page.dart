@@ -4,9 +4,9 @@ import 'package:easy_kart_app/controller/home_controller.dart';
 import 'package:easy_kart_app/view/scan/scan_in_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/route_manager.dart';
 
-import '../scan/scan_page.dart';
+import '../scan/scanin_qr_page.dart';
+import '../scan/scanout_qr_page.dart';
 import 'widget/button_widget.dart';
 
 class HomePage extends StatelessWidget {
@@ -66,9 +66,7 @@ class HomePage extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                Get.to(() => QRScannerScreen(
-                      isScanOut: true,
-                    ));
+                Get.to(() => ScanOutQRScannerScreen());
               },
               child: ButtonWidget(
                 title: "Scan Out",
