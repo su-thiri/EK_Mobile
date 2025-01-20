@@ -14,7 +14,10 @@ class ApiController extends GetxController {
   final TextEditingController qrController = TextEditingController();
 
   final ApiRepository _apiRepository = ApiRepositoryImpl();
-  final isInputValid = true.obs;
+  var isInputValid = true.obs;
+  var isProcessing = false.obs;
+  var isDisabled = false.obs;
+
   Future<void> fetchData() async {
     Get.dialog(
       const Center(child: CircularProgressIndicator()),
@@ -45,33 +48,42 @@ class ApiController extends GetxController {
       );
     }
   }
-  Future<void> sendQRData(Map<String, dynamic> requestBody) async {
+
+  Future<void> sendQRData(String qrCode) async {
+    if (isProcessing.value) return; // Prevent multiple API calls
+
+    isProcessing.value = true; // Set processing flag to true
     Get.dialog(
       const Center(child: CircularProgressIndicator()),
       barrierDismissible: false,
     );
 
     try {
-      final data =
-      await _apiRepository.postMobileData(mobileDataUrl, requestBody);
-      Get.back();
-      Get.defaultDialog(
-        backgroundColor: AppColor.buttonColor,
-        title: "Success",
-        titleStyle: AppTextStyle.dialogText.copyWith(fontSize: 20),
-        content: Text(
-          "${data['message']}",
-          style: AppTextStyle.dialogText,
-        ),
-        confirm: ElevatedButton(
-          onPressed: () =>Get.offAll(HomePage()),
-          child: Text(
-            "OK",
-            style: AppTextStyle.buttonText
-                .copyWith(color: Colors.black, fontSize: 15),
-          ),
-        ),
+      final response = await _apiRepository.postMobileData(
+        mobileDataUrl,
+        {"qr_code": qrCode},
       );
+      if (response.isNotEmpty) {
+        isProcessing.value = false;
+
+        await Get.defaultDialog(
+          backgroundColor: AppColor.buttonColor,
+          title: "Success",
+          titleStyle: AppTextStyle.dialogText.copyWith(fontSize: 20),
+          content: Text(
+            "${response['message']}",
+            style: AppTextStyle.dialogText,
+          ),
+          confirm: ElevatedButton(
+            onPressed: () => Get.offAll(HomePage()),
+            child: Text(
+              "OK",
+              style: AppTextStyle.buttonText
+                  .copyWith(color: Colors.black, fontSize: 15),
+            ),
+          ),
+        );
+      } else {}
     } catch (e) {
       Get.back();
 
@@ -94,8 +106,11 @@ class ApiController extends GetxController {
           child: const Text("OK"),
         ),
       );
+    } finally {
+      isProcessing.value = false; // Reset the flag after the process
     }
   }
+
   Future<void> sendData(Map<String, dynamic> requestBody) async {
     Get.dialog(
       const Center(child: CircularProgressIndicator()),

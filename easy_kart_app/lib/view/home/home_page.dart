@@ -1,7 +1,9 @@
 import 'package:easy_kart_app/config/app_color.dart';
 import 'package:easy_kart_app/config/app_textstyle.dart';
+import 'package:easy_kart_app/controller/home_controller.dart';
 import 'package:easy_kart_app/view/scan/scan_in_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 
 import '../scan/scan_page.dart';
@@ -12,6 +14,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final apiController = Get.put(ApiController());
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -29,12 +32,23 @@ class HomePage extends StatelessWidget {
             ),
             Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 3),
-                child: TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'Select Screen Mode For Present Phone',
-                    style:
-                        AppTextStyle.selectText.copyWith(color: AppColor.blue),
+                child: Obx(
+                  () => TextButton(
+                    onPressed: apiController.isDisabled.value
+                        ? null
+                        : () {
+                            apiController.isDisabled.value = true;
+
+                            print('Button clicked!');
+                          },
+                    child: Text(
+                      'Select Screen Mode For Present Phone',
+                      style: AppTextStyle.selectText.copyWith(
+                        color: apiController.isDisabled.value
+                            ? Colors.grey
+                            : AppColor.blue,
+                      ),
+                    ),
                   ),
                 )),
             SizedBox(

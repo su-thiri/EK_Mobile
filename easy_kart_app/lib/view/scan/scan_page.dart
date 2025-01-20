@@ -11,23 +11,30 @@ class QRScannerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final apiController = Get.find<ApiController>();
+    final apiController = Get.put(ApiController());
+    String code = '';
     return Scaffold(
       body: Stack(
         children: [
           MobileScanner(
             onDetect: (barcodeCapture) async {
-              if (barcodeCapture.barcodes.isNotEmpty) {
-                final barcode =
-                    barcodeCapture.barcodes.first; // Take the first barcode
-                if (barcode.rawValue != null) {
-                  final String code = barcode.rawValue!;
-                  print('QR Code Found: $code');
-
-                  // Call the API and post the QR code number
-                  await apiController.sendQRData({"qr_code": code});
+              if (code == "") {
+                if (barcodeCapture.barcodes.isNotEmpty) {
+                  final barcode = barcodeCapture.barcodes.first;
+                  if (barcode.rawValue != null) {
+                    code = barcode.rawValue!;
+                    await apiController.sendQRData(code);
+                  }
                 }
               }
+              // if (barcodeCapture.barcodes.isNotEmpty) {
+              //   final barcode = barcodeCapture.barcodes.first;
+              //   if (barcode.rawValue != null) {
+              //     final String code = barcode.rawValue!;
+              //     print('QR Code Found: $code');
+              //     // await apiController.sendQRData(code);
+              //   }
+              // }
             },
             fit: BoxFit.cover,
           ),
