@@ -24,7 +24,6 @@ class ScanOutQRScannerScreen extends StatelessWidget {
                     code = barcode.rawValue!;
                     final scanDateTime = DateTime.now();
 
-                    // Separate date and time
                     final scanDate =
                         "${scanDateTime.year}-${scanDateTime.month.toString().padLeft(2, '0')}-${scanDateTime.day.toString().padLeft(2, '0')}";
                     final scanTime =

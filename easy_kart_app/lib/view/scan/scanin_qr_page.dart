@@ -23,34 +23,40 @@ class ScanInQRScannerScreen extends StatelessWidget {
                   final barcode = barcodeCapture.barcodes.first;
                   if (barcode.rawValue != null) {
                     code = barcode.rawValue!;
-                    await apiController.sendQRData(code);
+
+                    // Function to parse the scan data
+                    Map<String, dynamic> parseScanData(String data) {
+                      List<String> fields =
+                          data.split('|').map((field) => field.trim()).toList();
+
+                      return {
+                        'driver_name': fields[0],
+                        'qr_code': fields[1],
+                        'role_in_team': fields[2],
+                        'round_name': fields[3],
+                        'team_name': fields[4],
+                        'team_number': fields[5],
+                        'championship_name': fields[6],
+                        'country_flag': fields[7],
+                        'nationality': fields[8],
+                        'driver_weight': double.parse(fields[9]),
+                        'team_logo': fields[10],
+                      };
+                    }
+
+                    // Parse the scanned code
+                    Map<String, dynamic> parsedData = parseScanData(code);
+
+                    print("Parsed Scan Data: $parsedData");
+
+                    // Send parsed data to the API
+                    await apiController.sendQRData(parsedData);
                   }
                 }
               }
-              // if (barcodeCapture.barcodes.isNotEmpty) {
-              //   final barcode = barcodeCapture.barcodes.first;
-              //   if (barcode.rawValue != null) {
-              //     final String code = barcode.rawValue!;
-              //     print('QR Code Found: $code');
-              //     // await apiController.sendQRData(code);
-              //   }
-              // }
             },
             fit: BoxFit.cover,
           ),
-          // MobileScanner(
-          //   onDetect: (barcodeCapture) {
-          //     final List<Barcode> barcodes = barcodeCapture.barcodes;
-          //     for (final barcode in barcodes) {
-          //       if (barcode.rawValue != null) {
-          //         final String code = barcode.rawValue!;
-          //         print('QR Code Found: $code');
-          //         // Handle the scanned QR code here
-          //       }
-          //     }
-          //   },
-          //   fit: BoxFit.cover,
-          // ),
           Positioned(
             top: 50,
             left: 0,

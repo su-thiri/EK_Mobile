@@ -112,7 +112,7 @@ class ApiController extends GetxController {
     }
   }
 
-  Future<void> sendQRData(String qrCode) async {
+  Future<void> sendQRData(Map<String, dynamic> requestBody) async {
     if (isProcessing.value) return; // Prevent multiple API calls
 
     isProcessing.value = true; // Set processing flag to true
@@ -124,7 +124,7 @@ class ApiController extends GetxController {
     try {
       final response = await _apiRepository.postMobileData(
         mobileDataUrl,
-        {"qr_code": qrCode},
+        requestBody,
       );
       if (response.isNotEmpty) {
         isProcessing.value = false;
