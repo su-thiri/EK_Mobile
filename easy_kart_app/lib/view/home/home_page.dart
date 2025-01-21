@@ -56,7 +56,8 @@ class HomePage extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                Get.to(() => ScanInPage());
+                Get.to(() => ScanInQRScannerScreen(isScanOut: false));
+                // Get.to(() => ScanInPage());
               },
               child: ButtonWidget(
                 title: "Scan In\n Or \nDriver Change",

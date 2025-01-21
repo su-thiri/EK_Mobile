@@ -31,9 +31,36 @@ class ScanOutQRScannerScreen extends StatelessWidget {
 
                     print("Scan Date: $scanDate");
                     print("Scan Time: $scanTime");
+                    Map<String, dynamic> parseScanData(String data) {
+                      List<String> fields =
+                          data.split('|').map((field) => field.trim()).toList();
 
-                    // Pass date and time separately to the API
-                    await apiController.sendScanOutQRData(scanDate, scanTime);
+                      return {
+                        'driver_name': fields[0],
+                        'qr_code': fields[1],
+                        'role_in_team': fields[2],
+                        'round_name': fields[3],
+                        'team_name': fields[4],
+                        'team_number': fields[5],
+                        'championship_name': fields[6],
+                        'country_flag': fields[7],
+                        'nationality': fields[8],
+                        'driver_weight': double.parse(fields[9]),
+                        'team_logo': fields[10],
+                        'driver_id': fields[11],
+                        'scan_out_data': {
+                          "date": scanDate,
+                          "time": scanTime,
+                          "message": "scan-out",
+                        }
+                      };
+                    }
+
+                    Map<String, dynamic> parsedData = parseScanData(code);
+
+                    await apiController.sendScanOutQRData(parsedData);
+
+                    print("Parsed Scan Data: $parsedData");
                   }
                 }
               }

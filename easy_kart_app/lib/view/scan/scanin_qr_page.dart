@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
+import '../../util/dialog.dart';
+
 class ScanInQRScannerScreen extends StatelessWidget {
   final bool isScanOut;
   const ScanInQRScannerScreen({super.key, required this.isScanOut});
@@ -41,6 +43,7 @@ class ScanInQRScannerScreen extends StatelessWidget {
                         'nationality': fields[8],
                         'driver_weight': double.parse(fields[9]),
                         'team_logo': fields[10],
+                        'driver_id': fields[11],
                       };
                     }
 
@@ -48,9 +51,16 @@ class ScanInQRScannerScreen extends StatelessWidget {
                     Map<String, dynamic> parsedData = parseScanData(code);
 
                     print("Parsed Scan Data: $parsedData");
-
+                    scanDialog(true, context,
+                        'Are you sure, you want to scan DRIVER-1 ?', () async {
+                      Get.back();
+                      await apiController.sendQRData(parsedData);
+                      // Get.to(() => ScanInQRScannerScreen(
+                      //       isScanOut: false,
+                      //     ));
+                    });
                     // Send parsed data to the API
-                    await apiController.sendQRData(parsedData);
+                    // await apiController.sendQRData(parsedData);
                   }
                 }
               }

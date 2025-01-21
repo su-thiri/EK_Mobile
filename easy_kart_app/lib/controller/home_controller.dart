@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:easy_kart_app/config/app_textstyle.dart';
 import 'package:easy_kart_app/view/home/home_page.dart';
+import 'package:easy_kart_app/view/scan/scan_in_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../config/api_constant.dart';
@@ -49,7 +50,7 @@ class ApiController extends GetxController {
     }
   }
 
-  Future<void> sendScanOutQRData(String time, String date) async {
+  Future<void> sendScanOutQRData(Map<String, dynamic> requestBody) async {
     if (isProcessing.value) return; // Prevent multiple API calls
 
     isProcessing.value = true; // Set processing flag to true
@@ -60,8 +61,8 @@ class ApiController extends GetxController {
 
     try {
       final response = await _apiRepository.postMobileData(
-        mobileDataUrl,
-        {"time": time, "date": date},
+        mobileDataUrl, requestBody,
+        // {"time": time, "date": date},
       );
       if (response.isNotEmpty) {
         isProcessing.value = false;
@@ -130,6 +131,7 @@ class ApiController extends GetxController {
         isProcessing.value = false;
 
         await Get.defaultDialog(
+          barrierDismissible: false,
           backgroundColor: AppColor.buttonColor,
           title: "Success",
           titleStyle: AppTextStyle.dialogText.copyWith(fontSize: 20),
@@ -138,7 +140,11 @@ class ApiController extends GetxController {
             style: AppTextStyle.dialogText,
           ),
           confirm: ElevatedButton(
-            onPressed: () => Get.offAll(HomePage()),
+            onPressed: () {
+              Get.back();
+
+              Get.to(ScanInPage());
+            },
             child: Text(
               "OK",
               style: AppTextStyle.buttonText
