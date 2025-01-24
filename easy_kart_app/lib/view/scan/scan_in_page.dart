@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../controller/home_controller.dart';
-import '../../util/dialog.dart';
 import '../home/home_page.dart';
 import 'widget/scan_button_widget.dart';
 

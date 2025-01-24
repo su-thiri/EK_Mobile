@@ -1,7 +1,6 @@
 import 'package:easy_kart_app/config/app_color.dart';
 import 'package:easy_kart_app/config/app_textstyle.dart';
 import 'package:easy_kart_app/controller/home_controller.dart';
-import 'package:easy_kart_app/view/scan/scan_in_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

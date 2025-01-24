@@ -57,8 +57,9 @@ class ScanOutQRScannerScreen extends StatelessWidget {
                     }
 
                     Map<String, dynamic> parsedData = parseScanData(code);
+                    String driverId = parsedData['driver_id'];
 
-                    await apiController.sendScanOutQRData(parsedData);
+                    await apiController.sendScanOutQRData(parsedData, driverId);
 
                     print("Parsed Scan Data: $parsedData");
                   }

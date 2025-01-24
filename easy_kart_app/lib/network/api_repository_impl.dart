@@ -14,4 +14,10 @@ class ApiRepositoryImpl extends ApiRepository {
       String endpoint, Map<String, dynamic> body) async {
     return await _apiService.post(endpoint, body);
   }
+
+  @override
+  Future<Map<String, dynamic>> putMobileData(
+      String endpoint, Map<String, dynamic> body) async {
+    return await _apiService.put(endpoint, body);
+  }
 }

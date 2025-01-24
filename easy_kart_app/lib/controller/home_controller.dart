@@ -50,7 +50,8 @@ class ApiController extends GetxController {
     }
   }
 
-  Future<void> sendScanOutQRData(Map<String, dynamic> requestBody) async {
+  Future<void> sendScanOutQRData(
+      Map<String, dynamic> requestBody, String driverId) async {
     if (isProcessing.value) return; // Prevent multiple API calls
 
     isProcessing.value = true; // Set processing flag to true
@@ -60,8 +61,8 @@ class ApiController extends GetxController {
     );
 
     try {
-      final response = await _apiRepository.postMobileData(
-        mobileDataUrl, requestBody,
+      final response = await _apiRepository.putMobileData(
+        "$mobileDataUrl$driverId/", requestBody,
         // {"time": time, "date": date},
       );
       if (response.isNotEmpty) {

@@ -44,6 +44,25 @@ class ApiService extends GetxService {
     }
   }
 
+  Future<http.Response> _putRequest(
+      String endpoint, Map<String, dynamic> body) async {
+    final uri = Uri.parse('$baseUrl$endpoint');
+    try {
+      final response = await http
+          .put(
+            uri,
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode(body),
+          )
+          .timeout(const Duration(seconds: 10));
+      return _handleResponse(response);
+    } on TimeoutException {
+      throw HttpException('Request timeout');
+    } catch (e) {
+      throw HttpException(e.toString());
+    }
+  }
+
   http.Response _handleResponse(http.Response response) {
     if (response.statusCode == 200 || response.statusCode == 201) {
       return response;
@@ -60,6 +79,12 @@ class ApiService extends GetxService {
   Future<Map<String, dynamic>> post(
       String endpoint, Map<String, dynamic> body) async {
     final response = await _postRequest(endpoint, body);
+    return jsonDecode(response.body);
+  }
+
+  Future<Map<String, dynamic>> put(
+      String endpoint, Map<String, dynamic> body) async {
+    final response = await _putRequest(endpoint, body);
     return jsonDecode(response.body);
   }
 }
