@@ -1,12 +1,14 @@
 import 'package:easy_kart_app/config/app_textstyle.dart';
-import 'package:easy_kart_app/view/home/home_page.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../config/app_color.dart';
 
 Future<dynamic> scanDialog(
-    bool isScanIn, BuildContext context, String title, Function onClicked) {
+  BuildContext context,
+  String title,
+  Function onClicked,
+  Function onClickedDuplicate,
+) {
   return showDialog(
     barrierDismissible: false,
     context: context,
@@ -25,7 +27,7 @@ Future<dynamic> scanDialog(
                   borderRadius: BorderRadius.circular(20)),
               color: Colors.white,
               onPressed: () {
-                isScanIn ? Get.offAll(HomePage()) : Get.back();
+                onClickedDuplicate();
               },
               child: Text(
                 'No',

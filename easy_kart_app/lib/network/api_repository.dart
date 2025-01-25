@@ -4,4 +4,7 @@ abstract class ApiRepository {
       String endpoint, Map<String, dynamic> body);
   Future<Map<String, dynamic>> putMobileData(
       String endpoint, Map<String, dynamic> body);
+  Future<Map<String, dynamic>> deleteMobileData(
+    String endpoint,
+  );
 }
