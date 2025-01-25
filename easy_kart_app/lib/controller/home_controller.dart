@@ -7,6 +7,7 @@ import 'package:easy_kart_app/view/home/home_page.dart';
 import 'package:easy_kart_app/view/scan/scan_in_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../config/api_constant.dart';
 import '../config/app_color.dart';
@@ -15,8 +16,8 @@ import '../network/api_repository_impl.dart';
 
 class ApiController extends GetxController {
   final TextEditingController qrController = TextEditingController();
-  SharedPreferences? _prefs;
   final ApiRepository _apiRepository = ApiRepositoryImpl();
+  final MobileScannerController scannerController = MobileScannerController();
   var isInputValid = true.obs;
   var isProcessing = false.obs;
   var isDisabled = false.obs;
@@ -28,8 +29,7 @@ class ApiController extends GetxController {
     );
 
     try {
-      final data = await _apiRepository
-          .getMobileData(mobileDataUrl); // Replace with your endpoint
+      final data = await _apiRepository.getMobileData(mobileDataUrl);
       Get.back();
       Get.defaultDialog(
         title: "Success",
@@ -52,6 +52,11 @@ class ApiController extends GetxController {
     }
   }
 
+  void dispose() {
+    scannerController.dispose();
+    super.dispose();
+  }
+
   Future<void> processQrCode(
       Map<String, dynamic> requestBody,
       Map<String, dynamic> duplirequestBody,
@@ -70,6 +75,7 @@ class ApiController extends GetxController {
       //  Get.snackbar('Duplicate', 'This QR Code has already been scanned.');
       scanDialog(context, 'Duplicate QR Scan detected!', () async {
         await sendDuplicateQRData(duplirequestBody, driverId);
+
         // Get.to(() => ScanInPage());
       }, () async {
         await deleteData(driverId);

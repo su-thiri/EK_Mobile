@@ -17,6 +17,7 @@ class ScanInQRScannerScreen extends StatelessWidget {
       body: Stack(
         children: [
           MobileScanner(
+            controller: apiController.scannerController,
             onDetect: (barcodeCapture) async {
               if (code == "") {
                 if (barcodeCapture.barcodes.isNotEmpty) {
@@ -72,101 +73,14 @@ class ScanInQRScannerScreen extends StatelessWidget {
                     String qrCode = parsedData['qr_code'];
                     apiController.processQrCode(parsedData, parsedDuplicateData,
                         qrCode, context, driverId);
-                    //  bool isDuplicate = await  DataStorage.isDuplicateQRCode(scannedData);
-                    // if (isDuplicate) {
-                    //   String driverId = parsedDuplicateData['driver_id'];
-                    //   // await apiController
-                    //   //     .sendDuplicateQRData(parsedDuplicateData, driverId)
-                    //   //     .then((value) async {
-                    //   await scanDialog(context, 'Duplicate QR Scan detected!',
-                    //       () async {
-                    //     await apiController.sendDuplicateQRData(
-                    //         parsedDuplicateData, driverId);
-                    //     // Get.to(() => ScanInPage());
-                    //   }, () async {
-                    //     await apiController.deleteData(driverId);
-                    //     await DataStorage.clearAllQRCodes();
-                    //   });
-                    //   // });
-                    // } else {
+
                     print("Parsed Scan Data: $parsedData");
-
-                    // await apiController.sendQRData(parsedData);
-
-                    // }
-                    // bool isDuplicate = await DataStorage.isDuplicateQRCode(
-                    //     parsedData['qr_code']);
-                    // if (!isDuplicate) {
-                    //   // await apiController.sendQRData(parsedData);
-                    //   //  await apiController.sendQRData(parsedData['qr_code']);
-
-                    //   await DataStorage.saveQRCode(parsedData['qr_code']);
-                    //   Get.snackbar('Success', 'QR Code sent successfully');
-                    // } else {
-                    //   // await apiController.sendDuplicateQR(scannedData);
-                    //   Get.snackbar('Duplicate', 'Duplicate QR Code data sent');
-                    // }
                   }
                 }
               }
             },
             fit: BoxFit.cover,
           ),
-
-          // scanDialog(
-          //   true,
-          //   context,
-          //   'Duplicate QR Scan detected!',
-          //   () async {
-          //     String driverId = parsedDuplicateData['driver_id'];
-
-          //     Get.back();
-          //     await apiController.sendDuplicateQRData(
-          //         parsedDuplicateData, driverId);
-          //   },
-          // );
-          // MobileScanner(
-          //   onDetect: (barcodeCapture) async {
-          //     if (code == "") {
-          //       if (barcodeCapture.barcodes.isNotEmpty) {
-          //         final barcode = barcodeCapture.barcodes.first;
-          //         if (barcode.rawValue != null) {
-          //           code = barcode.rawValue!;
-
-          //           Map<String, dynamic> parseScanData(String data) {
-          //             List<String> fields =
-          //                 data.split('|').map((field) => field.trim()).toList();
-
-          //             return {
-          //               'driver_name': fields[0],
-          //               'qr_code': fields[1],
-          //               'role_in_team': fields[2],
-          //               'round_name': fields[3],
-          //               'team_name': fields[4],
-          //               'team_number': fields[5],
-          //               'championship_name': fields[6],
-          //               'country_flag': fields[7],
-          //               'nationality': fields[8],
-          //               'driver_weight': double.parse(fields[9]),
-          //               'team_logo': fields[10],
-          //               'driver_id': fields[11],
-          //             };
-          //           }
-
-          //           Map<String, dynamic> parsedData = parseScanData(code);
-
-          //           print("Parsed Scan Data: $parsedData");
-          //           scanDialog(true, context,
-          //               'Are you sure, you want to scan DRIVER-1 ?', () async {
-          //             Get.back();
-          //             await apiController.sendQRData(parsedData);
-          //           });
-          //         }
-          //       }
-          //     }
-          //   },
-          //   fit: BoxFit.cover,
-          // ),
           Positioned(
             top: 50,
             left: 0,

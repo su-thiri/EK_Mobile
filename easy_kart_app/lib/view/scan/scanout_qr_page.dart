@@ -68,24 +68,6 @@ class ScanOutQRScannerScreen extends StatelessWidget {
             },
             fit: BoxFit.cover,
           ),
-
-          // MobileScanner(
-          //   onDetect: (barcodeCapture) async {
-          //     if (code == "") {
-          //       if (barcodeCapture.barcodes.isNotEmpty) {
-          //         final barcode = barcodeCapture.barcodes.first;
-          //         if (barcode.rawValue != null) {
-          //           code = barcode.rawValue!;
-          //           print("Scan Out $code");
-          //           // await apiController.sendScanOutQRData(code);
-          //         }
-          //       }
-          //     }
-
-          //   },
-          //   fit: BoxFit.cover,
-          // ),
-
           Positioned(
             top: 50,
             left: 0,
