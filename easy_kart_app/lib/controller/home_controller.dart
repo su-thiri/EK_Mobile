@@ -179,7 +179,7 @@ class ApiController extends GetxController {
           ),
           confirm: ElevatedButton(
             onPressed: () async {
-              Get.offAll(HomePage());
+              Get.to(ScanInPage());
             },
             child: Text(
               "OK",
